@@ -4,11 +4,10 @@ object Main extends App {
 
   def colorRules(colors: Seq[String]) = Try(colors(colors.indexOf("White") - 1) == "Green").getOrElse(false)
 
-  def natRules(colors: Seq[String], nats: Seq[String]) = {
+  def natRules(colors: Seq[String], nats: Seq[String]) =
     nats.head == "Norwegian" && colors(nats.indexOf("Brit")) == "Red" &&
       (Try(colors(nats.indexOf("Norwegian") - 1) == "Blue").getOrElse(false) ||
         Try(colors(nats.indexOf("Norwegian") + 1) == "Blue").getOrElse(false))
-  }
 
   def drinkRules(colors: Seq[String], nats: Seq[String], drinks: Seq[String]) =
     drinks(nats.indexOf("Dane")) == "Tea" &&
@@ -17,7 +16,7 @@ object Main extends App {
 
   def petRules(nats: Seq[String], pets: Seq[String]) = pets(nats.indexOf("Swede")) == "Dogs"
 
-  def smokeRules(colors: Seq[String], nats: Seq[String], drinks: Seq[String], pets: Seq[String], smokes: Seq[String]) = {
+  def smokeRules(colors: Seq[String], nats: Seq[String], drinks: Seq[String], pets: Seq[String], smokes: Seq[String]) =
     pets(smokes.indexOf("Pall Mall")) == "Birds" &&
       smokes(colors.indexOf("Yellow")) == "Dunhill" &&
       (Try(pets(smokes.indexOf("Blend") - 1) == "Cats").getOrElse(false) ||
@@ -28,7 +27,6 @@ object Main extends App {
       smokes(nats.indexOf("German")) == "Prince" &&
       (Try(drinks(smokes.indexOf("Blend") - 1) == "Water").getOrElse(false) ||
         Try(drinks(smokes.indexOf("Blend") + 1) == "Water").getOrElse(false))
-  }
 
   val start = System.currentTimeMillis()
   val models = for {
