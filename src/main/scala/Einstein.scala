@@ -57,7 +57,7 @@ object Einstein extends App {
         Try(drinks(smokes.indexOf("Blend") + 1) == "Water").getOrElse(false))
 
   // once the rules are created it, the actual solution is simple: iterate brute force, pruning early.
-  val models = for {
+  val solutions = for {
     colors <- Seq("Red", "Blue", "White", "Green", "Yellow").permutations if colorRules(colors)
     nats <- Seq("Brit", "Swede", "Dane", "Norwegian", "German").permutations if natRules(colors, nats)
     drinks <- Seq("Tea", "Coffee", "Milk", "Beer", "Water").permutations if drinkRules(colors, nats, drinks)
@@ -65,20 +65,21 @@ object Einstein extends App {
     smokes <- Seq("BlueMaster", "Blend", "Pall Mall", "Dunhill", "Prince").permutations if smokeRules(colors, nats, drinks, pets, smokes)
   } yield Seq(colors, nats, drinks, pets, smokes)
 
-  // solution is the head of iterator
-  val solution: Seq[Seq[String]] = models.next
+  // There *should* be just one solution...
+  solutions.foreach { solution =>
+    // so we can pretty-print, find out the maximum strength length of all cells
+    val maxLen = solution.flatten.map(_.length).max
 
-  // so we can pretty-print, find out the maximum strength length of all cells
-  val maxLen = solution.flatten.map(_.length).max
+    def pretty(str: String): String = str + (" " * (maxLen - str.length + 1))
 
-  def pretty(str: String): String = str + (" " * (maxLen - str.length + 1))
+    // a labels column
+    val labels = ("" +: Seq("Color", "Nation", "Drink", "Pet", "Smoke").map(_ + ":")).toIterator
 
-  // a labels column
-  val labels = ("" +: Seq("Color", "Nation", "Drink", "Pet", "Smoke").map(_ + ":")).toIterator
+    // print each row including a column header
+    ((1 to 5).map(n => s"House $n") +: solution).map(_.map(pretty)).map(x => (pretty(labels.next) +: x).mkString(" ")).foreach(println)
 
-  // print each row including a column header
-  ((1 to 5).map(n => s"House $n") +: solution).map(_.map(pretty)).map(x => (pretty(labels.next) +: x).mkString(" ")).foreach(println)
+    println()
+    println(s"The ${solution(1)(solution(3).indexOf("Fish"))} owns the Fish")
+  }
 
-  println()
-  println(s"The ${solution(1)(solution(3).indexOf("Fish"))} owns the Fish")
 }
